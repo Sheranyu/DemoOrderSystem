@@ -1,0 +1,33 @@
+version: '3.9'
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+  orders:
+    build:
+      context: .
+      dockerfile: src/OrderService/Dockerfile
+    ports:
+      - "5000:5000"
+    depends_on:
+      - rabbitmq
+  invoice:
+    build:
+      context: .
+      dockerfile: src/InvoiceService/Dockerfile
+    depends_on:
+      - rabbitmq
+  payment:
+    build:
+      context: .
+      dockerfile: src/PaymentService/Dockerfile
+    depends_on:
+      - rabbitmq
+  shipping:
+    build:
+      context: .
+      dockerfile: src/ShippingService/Dockerfile
+    depends_on:
+      - rabbitmq
